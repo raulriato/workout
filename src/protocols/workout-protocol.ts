@@ -9,7 +9,10 @@ type WorkoutEntity = {
 
 type Workout = Omit<WorkoutEntity, 'id'>;
 
+type WorkoutUpdate = Omit<WorkoutEntity, 'id' | 'muscle' | 'name'>
+
 export {
     Workout,
-    WorkoutEntity
+    WorkoutEntity,
+    WorkoutUpdate
 }

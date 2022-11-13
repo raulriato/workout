@@ -9,7 +9,8 @@ const STATUS_CODE = Object.freeze({
     SERVER_ERROR: 500,
     NOT_FOUND: 404,
     UNAUTHORIZED: 401,
-    CONFLICT: 409
+    CONFLICT: 409,
+    NO_CONTENT: 204
   });
   
   const STATUS_TEXT = Object.freeze({
@@ -25,35 +26,40 @@ const STATUS_CODE = Object.freeze({
   
   function badRequestResponse(res: Response, text: string = STATUS_TEXT.BAD_REQUEST) {
     return res.status(STATUS_CODE.BAD_REQUEST).send(text);
-  }
+  };
   
   function notFoundRequestResponse(res: Response, text: string = STATUS_TEXT.NOT_FOUND) {
     return res.status(STATUS_CODE.NOT_FOUND).send(text);
-  }
+  };
   
   function unprocessableRequestResponse(res: Response, text: string[] = STATUS_TEXT.UNPROCESSABLE_ENTITY) {
     return res.status(STATUS_CODE.UNPROCESSABLE_ENTITY).send(text);
-  }
+  };
+
   function okResponse(res: Response, text: Workout[] | string = STATUS_TEXT.OK) {
     return res.status(STATUS_CODE.OK).send(text);
-  }
+  };
   
   function serverErrorResponse(res: Response, error: Response, text: string = STATUS_TEXT.SERVER_ERROR) {
     console.error(error);
     return res.status(STATUS_CODE.SERVER_ERROR).send(text);
-  }
+  };
 
   function unauthorizedRequestResponse(res: Response, text: string = STATUS_TEXT.UNAUTHORIZED) {
     return res.status(STATUS_CODE.UNAUTHORIZED).send(text);
-  }
+  };
 
   function conflictResponse(res: Response, text: string = STATUS_TEXT.CONFLICT) {
     return res.status(STATUS_CODE.CONFLICT).send(text);
-  }
+  };
 
   function createdResponse(res: Response, text: string = STATUS_TEXT.CREATED) {
     return res.status(STATUS_CODE.CREATED).send(text);
-  }
+  };
+
+  function noContentResponse(res: Response) {
+    return res.sendStatus(204);
+  };
   
   export {
     badRequestResponse,
@@ -63,5 +69,6 @@ const STATUS_CODE = Object.freeze({
     serverErrorResponse,
     unauthorizedRequestResponse,
     conflictResponse,
-    createdResponse
+    createdResponse,
+    noContentResponse
   };

@@ -8,4 +8,13 @@ const workoutSchema = joi.object({
     repetitions: joi.number().integer().positive().required()
 });
 
-export { workoutSchema };
+const updateSchema = joi.object({
+    weight: joi.number().integer().positive().required(),
+    series: joi.number().integer().positive().required(),
+    repetitions: joi.number().integer().positive().required(),
+});
+
+export {
+    workoutSchema,
+    updateSchema
+};

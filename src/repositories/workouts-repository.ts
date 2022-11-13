@@ -1,5 +1,5 @@
 import { connection } from "../database/postgres.js";
-import { QueryResult } from "pg";
+import { Query, QueryResult } from "pg";
 import { Workout, WorkoutEntity } from "../protocols/workout-protocol.js";
 
 async function post(name: string, muscle: string, weight: number, series: number, repetitions: number): Promise<QueryResult<Workout>> {
@@ -19,12 +19,30 @@ async function getWorkoutByName(name: string): Promise<QueryResult<WorkoutEntity
     )
 };
 
+async function getWorkoutById(id: number): Promise<QueryResult<WorkoutEntity>> {
+    return connection.query(
+        `
+            SELECT * FROM workouts WHERE id = $1;
+        `, [id]
+    )
+};
+
 async function getWorkouts(): Promise<QueryResult<WorkoutEntity>> {
     return connection.query(`SELECT * FROM workouts`);
+};
+
+async function update(weight: number, series: number, repetitions: number, id: number): Promise<QueryResult> {
+    return connection.query(
+        `
+            UPDATE workouts SET weight = $1, series = $2, repetitions = $3 WHERE id = $4;
+        `, [weight, series, repetitions, id]
+    )
 };
 
 export {
     post,
     getWorkoutByName,
-    getWorkouts
+    getWorkoutById,
+    getWorkouts,
+    update
 };

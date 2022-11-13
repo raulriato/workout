@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as workoutsRepository from '../repositories/workouts-repository.js';
 import { Workout } from '../protocols/workout-protocol.js'
-import { createdResponse, serverErrorResponse } from "../helper/responses.js";
+import { createdResponse, okResponse, serverErrorResponse } from "../helper/responses.js";
 
 async function post(req: Request, res: Response) {
     const workout = res.locals.workout as Workout;
@@ -14,6 +14,16 @@ async function post(req: Request, res: Response) {
     }
 };
 
+async function listAll(req: Request, res: Response) {
+    try {
+        const workouts = await workoutsRepository.getWorkouts();
+        return okResponse(res, workouts.rows)
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
 export {
-    post
+    post,
+    listAll
 };

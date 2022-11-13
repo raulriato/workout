@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Workout } from "../protocols/workout-protocol";
 
 const STATUS_CODE = Object.freeze({
     OK: 200,
@@ -33,7 +34,7 @@ const STATUS_CODE = Object.freeze({
   function unprocessableRequestResponse(res: Response, text: string[] = STATUS_TEXT.UNPROCESSABLE_ENTITY) {
     return res.status(STATUS_CODE.UNPROCESSABLE_ENTITY).send(text);
   }
-  function okResponse(res: Response, text: string = STATUS_TEXT.OK) {
+  function okResponse(res: Response, text: Workout[] | string = STATUS_TEXT.OK) {
     return res.status(STATUS_CODE.OK).send(text);
   }
   

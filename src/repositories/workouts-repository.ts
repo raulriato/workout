@@ -1,6 +1,6 @@
 import { connection } from "../database/postgres.js";
 import { QueryResult } from "pg";
-import { Workout } from "../protocols/workout-protocol.js";
+import { Workout, WorkoutEntity } from "../protocols/workout-protocol.js";
 
 async function post(name: string, muscle: string, weight: number, series: number, repetitions: number): Promise<QueryResult<Workout>> {
     return connection.query(
@@ -11,7 +11,7 @@ async function post(name: string, muscle: string, weight: number, series: number
     )
 };
 
-async function getWorkoutByName(name: string): Promise<QueryResult<Workout>> {
+async function getWorkoutByName(name: string): Promise<QueryResult<WorkoutEntity>> {
     return connection.query(
         `
             SELECT * FROM workouts WHERE name ILIKE '$1';
@@ -19,7 +19,12 @@ async function getWorkoutByName(name: string): Promise<QueryResult<Workout>> {
     )
 };
 
+async function getWorkouts(): Promise<QueryResult<WorkoutEntity>> {
+    return connection.query(`SELECT * FROM workouts`);
+};
+
 export {
     post,
-    getWorkoutByName
+    getWorkoutByName,
+    getWorkouts
 };

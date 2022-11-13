@@ -11,6 +11,15 @@ async function post(name: string, muscle: string, weight: number, series: number
     )
 };
 
+async function getWorkoutByName(name: string): Promise<QueryResult<Workout>> {
+    return connection.query(
+        `
+            SELECT * FROM workouts WHERE name ILIKE '$1';
+        `, [name]
+    )
+};
+
 export {
-    post
+    post,
+    getWorkoutByName
 };

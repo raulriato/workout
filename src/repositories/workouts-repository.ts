@@ -48,11 +48,20 @@ async function remove(id: number) {
     )
 };
 
+async function getWorkoutsByMuscleName(muscle: string) {
+    return connection.query(
+        `
+            SELECT * FROM workouts WHERE muscle ILIKE $1;
+        `, [muscle]
+    )
+};
+
 export {
     post,
     getWorkoutByName,
     getWorkoutById,
     getWorkouts,
     update,
-    remove
+    remove,
+    getWorkoutsByMuscleName
 };

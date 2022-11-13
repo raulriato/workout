@@ -8,5 +8,6 @@ router.post('/workouts', workoutsMiddleware.post, workoutsController.post);
 router.get('/workouts', workoutsController.listAll);
 router.put('/workouts/:workoutId', workoutsMiddleware.update, workoutsController.update);
 router.delete('/workouts/:workoutId', workoutsMiddleware.remove, workoutsController.remove);
+router.get('/workouts/:muscleName', workoutsController.listByMuscle);
 
 export default router;

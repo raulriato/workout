@@ -43,11 +43,23 @@ async function remove(req: Request, res: Response) {
     } catch (error) {
         return serverErrorResponse(res, error);
     }
+};
+
+async function listByMuscle(req: Request, res: Response) {
+    const { muscleName } = req.params;
+
+    try {
+        const workouts = await workoutsRepository.getWorkoutsByMuscleName(muscleName);
+        return okResponse(res, workouts.rows);
+    } catch (error) {
+        return serverErrorResponse(res, error);
+    }
 }
 
 export {
     post,
     listAll,
     update,
-    remove
+    remove,
+    listByMuscle
 };

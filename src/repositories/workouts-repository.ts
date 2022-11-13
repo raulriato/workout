@@ -12,9 +12,10 @@ async function post(name: string, muscle: string, weight: number, series: number
 };
 
 async function getWorkoutByName(name: string): Promise<QueryResult<WorkoutEntity>> {
+    console.log('fez a requisição', name);
     return connection.query(
         `
-            SELECT * FROM workouts WHERE name ILIKE '$1';
+            SELECT * FROM workouts WHERE name ILIKE $1;
         `, [name]
     )
 };
@@ -39,10 +40,19 @@ async function update(weight: number, series: number, repetitions: number, id: n
     )
 };
 
+async function remove(id: number) {
+    return connection.query(
+        `
+            DELETE FROM workouts WHERE id = $1;
+        `, [id]
+    )
+};
+
 export {
     post,
     getWorkoutByName,
     getWorkoutById,
     getWorkouts,
-    update
+    update,
+    remove
 };

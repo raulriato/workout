@@ -1,10 +1,10 @@
 import { updateSchema, workoutSchema } from "../schemas/workouts-schema.js";
-import { Request, Response, NextFunction } from "express";
-import { Workout, WorkoutUpdate } from "../protocols/workout-protocol.js";
+import { Request, Response, NextFunction, request } from "express";
+import { Workout, WorkoutEntity, WorkoutUpdate } from "../protocols/workout-protocol.js";
 import { badRequestResponse, conflictResponse, notFoundRequestResponse, serverErrorResponse, unprocessableRequestResponse } from "../helper/responses.js";
 import { getWorkoutById, getWorkoutByName } from '../repositories/workouts-repository.js'
 
-async function workoutMiddleware(req: Request, res: Response, next: NextFunction) {
+async function post(req: Request, res: Response, next: NextFunction) {
     const workout = req.body as Workout;
     const { error } = workoutSchema.validate(workout, { abortEarly: false });
 
@@ -15,6 +15,7 @@ async function workoutMiddleware(req: Request, res: Response, next: NextFunction
 
     try {
         const verifiedWorkout = await getWorkoutByName(workout.name);
+        console.log('passou na requisição')
 
         if (verifiedWorkout.rowCount > 0) {
             return conflictResponse(res, `o treino ${workout.name} já existe`);
@@ -28,7 +29,7 @@ async function workoutMiddleware(req: Request, res: Response, next: NextFunction
     next();
 };
 
-async function updateMiddleware(req: Request, res: Response, next: NextFunction) {
+async function update(req: Request, res: Response, next: NextFunction) {
     const { workoutId } = req.params;
     const updates = req.body as WorkoutUpdate;
 
@@ -57,9 +58,32 @@ async function updateMiddleware(req: Request, res: Response, next: NextFunction)
     } catch (error) {
         return serverErrorResponse(res, error);
     }
+};
+
+async function remove(req: Request, res: Response, next: NextFunction) {
+    const { workoutId } = req.params;
+
+    if (!Number(workoutId)) {
+        return badRequestResponse(res);
+    };
+
+    try {
+        const verifiedWorkout = await getWorkoutById(Number(workoutId));
+
+        if (verifiedWorkout.rowCount === 0) {
+            return notFoundRequestResponse(res);
+        };
+
+        res.locals.workout = verifiedWorkout.rows[0];
+        
+        next();
+    } catch (error) {
+        return serverErrorResponse(res, error);
+    }
 }
 
 export {
-    workoutMiddleware,
-    updateMiddleware
+    post,
+    update,
+    remove
 };

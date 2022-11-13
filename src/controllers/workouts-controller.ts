@@ -34,8 +34,20 @@ async function update(req: Request, res: Response) {
     }
 };
 
+async function remove(req: Request, res: Response) {
+    const workout = res.locals.workout as WorkoutEntity;
+
+    try {
+        await workoutsRepository.remove(workout.id);
+        return noContentResponse(res);
+    } catch (error) {
+        return serverErrorResponse(res, error);
+    }
+}
+
 export {
     post,
     listAll,
-    update
+    update,
+    remove
 };

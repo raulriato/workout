@@ -1,6 +1,6 @@
 import { updateSchema, workoutSchema } from "../schemas/workouts-schema.js";
-import { Request, Response, NextFunction, request } from "express";
-import { Workout, WorkoutEntity, WorkoutUpdate } from "../protocols/workout-protocol.js";
+import { Request, Response, NextFunction } from "express";
+import { Workout, WorkoutUpdate } from "../protocols/workout-protocol.js";
 import { badRequestResponse, conflictResponse, notFoundRequestResponse, serverErrorResponse, unprocessableRequestResponse } from "../helper/responses.js";
 import { getWorkoutById, getWorkoutByName } from '../repositories/workouts-repository.js'
 
@@ -15,9 +15,9 @@ async function post(req: Request, res: Response, next: NextFunction) {
 
     try {
         const verifiedWorkout = await getWorkoutByName(workout.name);
-        console.log('passou na requisição')
+        console.log(verifiedWorkout)
 
-        if (verifiedWorkout.rowCount > 0) {
+        if (verifiedWorkout) {
             return conflictResponse(res, `o treino ${workout.name} já existe`);
         };
     } catch (error) {
@@ -48,12 +48,12 @@ async function update(req: Request, res: Response, next: NextFunction) {
         const id = Number(workoutId);
         const verifiedWorkout = await getWorkoutById(id);
 
-        if (verifiedWorkout.rowCount === 0) {
+        if (!verifiedWorkout) {
             return notFoundRequestResponse(res);
         }
 
         res.locals.updates = updates;
-        res.locals.workout = verifiedWorkout.rows[0];
+        res.locals.workout = verifiedWorkout;
         next();
     } catch (error) {
         return serverErrorResponse(res, error);
@@ -70,11 +70,11 @@ async function remove(req: Request, res: Response, next: NextFunction) {
     try {
         const verifiedWorkout = await getWorkoutById(Number(workoutId));
 
-        if (verifiedWorkout.rowCount === 0) {
+        if (!verifiedWorkout) {
             return notFoundRequestResponse(res);
         };
 
-        res.locals.workout = verifiedWorkout.rows[0];
+        res.locals.workout = verifiedWorkout;
         
         next();
     } catch (error) {

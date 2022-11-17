@@ -17,7 +17,7 @@ async function post(req: Request, res: Response) {
 async function listAll(req: Request, res: Response) {
     try {
         const workouts = await workoutsRepository.getWorkouts();
-        return okResponse(res, workouts.rows)
+        return okResponse(res, workouts)
     } catch (error) {
         serverErrorResponse(res, error);
     }
@@ -50,7 +50,7 @@ async function listByMuscle(req: Request, res: Response) {
 
     try {
         const workouts = await workoutsRepository.getWorkoutsByMuscleName(muscleName);
-        return okResponse(res, workouts.rows);
+        return okResponse(res, workouts);
     } catch (error) {
         return serverErrorResponse(res, error);
     }

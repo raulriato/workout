@@ -10,7 +10,7 @@ services:
     volumes:
       - .:/workout
   db:
-    image: postgres:13
+    image: postgres
     container_name: db
     ports:
       - 2345:5432

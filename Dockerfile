@@ -4,14 +4,13 @@ WORKDIR /workout
 
 COPY package*.json ./
 
-RUN npm install
-
 COPY . ./workout
 
 ENV PORT=4000
 
 EXPOSE 4000
 
+RUN npm install
 RUN npx prisma generate
 
 CMD ["npm", "run", "dev:migrate"]

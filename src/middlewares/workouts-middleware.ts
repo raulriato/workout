@@ -15,7 +15,6 @@ async function post(req: Request, res: Response, next: NextFunction) {
 
     try {
         const verifiedWorkout = await getWorkoutByName(workout.name);
-        console.log(verifiedWorkout)
 
         if (verifiedWorkout) {
             return conflictResponse(res, `o treino ${workout.name} já existe`);

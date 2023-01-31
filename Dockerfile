@@ -1,16 +1,17 @@
-FROM node:16.14.2
+FROM node:15
 
-WORKDIR /workout
+WORKDIR /usr/src
 
-COPY package*.json ./
+COPY . .
 
-COPY . ./workout
+EXPOSE 5000
 
-ENV PORT=4000
-
-EXPOSE 4000
-
-RUN npm install
+RUN npm i
 RUN npx prisma generate
 
-CMD ["npm", "run", "dev:migrate"]
+RUN apt-get update && apt-get install -y wget
+
+ENV DOCKERIZE_VERSION v0.6.1
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+  && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+  && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz

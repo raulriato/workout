@@ -15,3 +15,11 @@ app.use(workoutsRouter);
 app.get('/status', (req: Request, res: Response) => res.status(200).send('olaaaaaaaaaaaaaaaaaaaaa'));
 
 app.listen(process.env.PORT, () => console.log(`listening on port ${process.env.PORT}`));
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error(reason)
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('uncaughtException', JSON.stringify(err))
+});
